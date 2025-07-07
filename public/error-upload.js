@@ -1,5 +1,5 @@
 (function () {
-  const REPORT_URL = "YOUR_REPORT_API_ENDPOINT";
+  const REPORT_URL = "https://js-script-nine.vercel.app/api/logs";
 
   function formatError(error) {
     let message = "";
