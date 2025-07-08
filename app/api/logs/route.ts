@@ -44,11 +44,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "body 是必需的" }, { status: 400 });
     }
 
-    const newUser = await prisma.errorLog.create({
-      data: {
-        source: body.source,
-        info: JSON.stringify(body),
-      },
+    const body$1 = body.map((b: any) => {
+      return {
+        source: b.source,
+        info: JSON.stringify(b),
+      };
+    });
+
+    const newUser = await prisma.errorLog.createMany({
+      data: body$1,
     });
     const response = NextResponse.json(newUser, { status: 201 });
 
