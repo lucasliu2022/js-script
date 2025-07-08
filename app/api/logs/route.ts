@@ -5,14 +5,34 @@ export async function GET() {
   try {
     const users = await prisma.errorLog.findMany({});
 
-    return NextResponse.json(users, { status: 200 });
+    const response = NextResponse.json(users, { status: 200 });
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return response;
   } catch (error) {
     console.error("get error log error:", error);
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       { message: "fail get error log" },
       { status: 500 }
     );
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return response;
   }
 }
 
@@ -27,14 +47,38 @@ export async function POST(request: Request) {
     const newUser = await prisma.errorLog.create({
       data: {
         source: body.source,
-        info: JSON.stringify(body)
+        info: JSON.stringify(body),
       },
     });
-    return NextResponse.json(newUser, { status: 201 });
+    const response = NextResponse.json(newUser, { status: 201 });
+
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return response;
   } catch (error) {
     console.error("创建用户失败:", error);
 
-    return NextResponse.json({ message: "创建用户失败" }, { status: 500 });
+    const response = NextResponse.json(
+      { message: "创建用户失败" },
+      { status: 500 }
+    );
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return response;
   }
 }
 
