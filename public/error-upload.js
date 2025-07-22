@@ -57,9 +57,12 @@
   }
 
   function sendReportByXHR(errorData, callback) {
-    if (!REPORT_URL || REPORT_URL === "YOUR_REPORT_API_ENDPOINT") {
-      console.warn("请配置 REPORT_URL，当前未设置上报接口。");
-      console.log("待上报错误数据:", errorData);
+    if (!REPORT_URL) {
+      console.warn(
+        "Please configure REPORT_URL; the reporting interface is currently not set."
+      );
+
+      console.log("Error data to be reported:", errorData);
       if (callback) callback(false);
       return;
     }
@@ -67,8 +70,9 @@
     var xhr = new (window.XMLHttpRequest || window.ActiveXObject)(
       "Microsoft.XMLHTTP"
     );
+
     if (!xhr) {
-      console.error("XMLHttpRequest 不可用");
+      console.error("XMLHttpRequest is not available");
       if (callback) callback(false);
       return;
     }
@@ -81,7 +85,8 @@
         if (xhr.status >= 200 && xhr.status < 300) {
           if (callback) callback(true);
         } else {
-          console.error("错误上报失败:", xhr.status, xhr.statusText);
+          // Error reporting failed:
+          console.error("Error reporting failed:", xhr.status, xhr.statusText);
           if (callback) callback(false);
         }
         isReporting = false;
@@ -90,7 +95,7 @@
     };
 
     xhr.onerror = function () {
-      console.error("上报请求发送失败 (XHR.onerror):", xhr.statusText);
+      console.error("Report request failed (XHR.onerror):", xhr.statusText);
       if (callback) callback(false);
       isReporting = false;
       processReportQueue();
@@ -99,7 +104,7 @@
     try {
       xhr.send(JSON.stringify(errorData));
     } catch (e) {
-      console.error("发送 XHR 请求时发生错误:", e);
+      console.error("An error occurred while sending the XHR request:", e);
       if (callback) callback(false);
       isReporting = false;
       processReportQueue();
@@ -159,5 +164,7 @@
   } else {
   }
 
-  console.log("错误上报脚本已初始化（兼容旧版本）。");
+  console.log(
+    "Error reporting script initialized (compatible with older versions)."
+  );
 })();
